@@ -1,0 +1,15 @@
+import pandas as pd
+
+def parse_table_pandas(source):
+    try:
+        # pd.read_html() - основная функция pandas для парсинга HTML таблиц
+        tables = pd.read_html(source)
+        return tables
+        
+    except ValueError as e:
+        print(f"Ошибка: таблицы не найдены - {e}")
+        return None
+        
+    except Exception as e:
+        print(f"Ошибка при парсинге: {e}")
+        return None
