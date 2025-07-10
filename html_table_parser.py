@@ -1,8 +1,10 @@
+"""Utilities for parsing HTML tables."""
+
 import pandas as pd
 from bs4 import BeautifulSoup
 
 
-def parse_tables_pandas(source: str):
+def parse_html_tables(source: str):
     """Parse all HTML tables from the given source.
 
     Parameters
@@ -23,8 +25,8 @@ def parse_tables_pandas(source: str):
         return []
 
 
-def parse_table_bs4(html: str):
-    """Parse the first HTML table using BeautifulSoup.
+def parse_html_table(html: str, index: int = 0):
+    """Parse a single HTML table using BeautifulSoup.
 
     Parameters
     ----------
@@ -37,11 +39,12 @@ def parse_table_bs4(html: str):
         Parsed table as a list of rows with cell values.
     """
     soup = BeautifulSoup(html, 'html.parser')
-    table = soup.find('table')
-    if table is None:
+    tables = soup.find_all('table')
+    if not tables or index >= len(tables):
         return []
+    table = tables[index]
 
-    rows = []
+    rows: list[list[str]] = []
     for tr in table.find_all('tr'):
         cells = [td.get_text(strip=True) for td in tr.find_all(['td', 'th'])]
         if cells:
